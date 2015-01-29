@@ -139,6 +139,45 @@ $(document).ready(function() {
 
 	});
 
+    // Create an entry in the settings table using the line contained in data
+    var fillSettingsTable = function (data) {
+        var line = data.line;
+        if (line[0] == '$') {
+            var key = line.substring(0, line.indexOf("="))
+            var value = line.substring(line.indexOf("=") + 1, line.indexOf(" "))
+            var description = line.substring(line.indexOf("(") + 1, line.length - 1)
+            var inputDiv = $(
+                '<div class="input-group col-xs-5">' +
+                    '<span class="input-group-addon settings-key">' + key + '</span>' +
+                    '<input type="text" class="form-control settings-value" placeholder="' + value + '"></input>' +
+                    '<span class="input-group-addon">' + description + '</span>' +
+                '</div>');
+            $('#settingsTable').append(inputDiv);
+        }
+    }
+
+    // Clear the table and load all settings from grbl
+    $('#loadSettings').on('click', function() {
+        socket.on('serialRead', fillSettingsTable);
+        $('#settingsTable').empty();
+		socket.emit('gcodeLine', { line: '$$' });
+    });
+
+    // Save all changed settings back to the socket
+    // Leaves out any values which are not valid numbers
+    $('#saveSettings').on('click', function() {
+        var settingLine = '';
+        $('#settingsTable div').each( function() {
+            if ($.isNumeric($(this).find('.settings-value').val())) {
+                settingLine += $(this).find('.settings-key').html() + '=' + 
+                               $(this).find('.settings-value').val() + '\n';
+            }
+        });
+        if (settingLine != '') {
+            socket.emit('gcodeLine', { line: settingLine });
+        }
+    });
+
 	// shift enter for send command
 	$('#command').keydown(function (e) {
 		if (e.shiftKey) {

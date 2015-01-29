@@ -122,7 +122,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">GRBLWeb - a web based CNC controller for GRBL</a>
+          <a class="navbar-brand" href="index.html">GRBLWeb - a web based CNC controller for GRBL</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -131,7 +131,6 @@
 <li><button type="button" class="btn btn-default" style="margin: 10px;" id="sendReset">RESET (ctrl-x)</button></li>
 <li><button type="button" class="btn btn-success" style="margin: 10px;" id="sendGrblHelp">help ($)</button></li>
 <li><button type="button" class="btn btn-success" style="margin: 10px;" id="sendGrblSettings">settings ($$)</button></li>
-<li><button type="button" class="btn btn-success" style="margin: 10px;"onClick="window.open('settings.html','_blank'); return false;">Settings View</button></li>
 
           </ul>
         </div>
@@ -242,30 +241,17 @@
 
           </ul>
         </div>
-        <!--<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">-->
+        <div id="command"></div><div id="fileInput"></div> <!-- placeholder -->
         <div class="table-cell">
-
-<div id="renderArea"></div>
-<pre id="console"></pre>
-<br />
-<textarea style="height: 300px; width: 99%; overflow: auto;" id="command"></textarea>
-
-<span style="font-style: italic;">Drag a .gcode or .nc file to the command box or click Upload GCODE to upload it.</span>
-
-<div class="input-group" style="clear: both; width: 300px; float: right; text-align: right; margin-top: 10px;">
-<span class="input-group-btn">
-<button type="button" class="btn btn-default disabled" id="qStatus">0/0</button>
-<button type="button" class="btn btn-default" id="pause">Pause</button>
-<button type="button" class="btn btn-default disabled" id="clearQ">Clear Queue</button>
-</span>
-</div><!-- /input-group -->
-
-<div style="clear: both; float: right; margin-top: 10px;">
-<span class="btn btn-default btn-file">Upload GCODE <input type="file" id="fileInput" /></span>
-<button type="button" class="btn btn-default" id="sendCommand">Send to CNC (shift+enter)</button>
-</div>
-
-          </div>
+            <h1>Settings</h1>
+            <form class="form-horizontal" id="settingsTable">
+                <!-- Filled using jQuery -->
+            </form>
+            <div class="btn-group" role="group">
+                <button type="button" id="loadSettings" class="btn btn-info">Load settings</button>
+                <button type="button" id="saveSettings" class="btn btn-success">Save settings</button>
+            </div>
+        </div>
         </div>
       </div>
     </div>
