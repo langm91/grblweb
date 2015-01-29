@@ -72,8 +72,12 @@ $(document).ready(function() {
 	});
 
 	socket.on('serialRead', function (data) {
-		$('#console').append(data.line);
-		$('#console').scrollTop($("#console")[0].scrollHeight - $("#console").height());
+        if ($('#console').length) {
+            $('#console').append(data.line);
+            $('#console').scrollTop($("#console")[0].scrollHeight - $("#console").height());
+        } else {
+            fillSettingsTable(data);
+        }
 	});
 
 	$('#choosePort').on('change', function() {
@@ -142,10 +146,11 @@ $(document).ready(function() {
     // Create an entry in the settings table using the line contained in data
     var fillSettingsTable = function (data) {
         var line = data.line;
-        if (line[0] == '$') {
-            var key = line.substring(0, line.indexOf("="))
-            var value = line.substring(line.indexOf("=") + 1, line.indexOf(" "))
-            var description = line.substring(line.indexOf("(") + 1, line.length - 1)
+        if (line.indexOf('RESP: $') != -1) {
+            line = line.substring(line.indexOf('$'), line.lastIndexOf('<')) // Remove <span>
+            var key = line.substring(line.indexOf('$'), line.indexOf('='))
+            var value = line.substring(line.indexOf('=') + 1, line.indexOf(' '))
+            var description = line.substring(line.indexOf('(') + 1, line.length - 1)
             var inputDiv = $(
                 '<div class="input-group col-xs-5">' +
                     '<span class="input-group-addon settings-key">' + key + '</span>' +
@@ -158,7 +163,6 @@ $(document).ready(function() {
 
     // Clear the table and load all settings from grbl
     $('#loadSettings').on('click', function() {
-        socket.on('serialRead', fillSettingsTable);
         $('#settingsTable').empty();
 		socket.emit('gcodeLine', { line: '$$' });
     });
